@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MyAnimeList App</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <string name="home">Home</string>
+    <string name="anime">Anime</string>
+    <string name="manga">Manga</string>
+    <string name="profile">Profile</string>
+    <string name="logout">Log out</string>
+</resources>
