@@ -4,91 +4,109 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-MainFragment.onFragmentBtnSelected {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
     Toolbar toolbar;
     NavigationView navigationView;
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Change default search icon
         SearchView searchView = findViewById(R.id.searchView);
-        ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_mag_icon);
-        searchIcon.setColorFilter(R.color.colorWhite, PorterDuff.Mode.SRC_IN);
+        int searchIconId = getResources().getIdentifier("android:id/search_button", null, null);
+        ImageView searchIcon = searchView.findViewById(searchIconId);
+        searchIcon.setImageResource(R.drawable.ic_search_white_24dp);
 
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
         drawerLayout = findViewById(R.id.drawer);
         navigationView = findViewById(R.id.navigationView);
+        navigationView.setNavigationItemSelectedListener(this);
 
+        // Set drawer button
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         actionBarDrawerToggle.syncState();
+        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
 
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.containerMain, new MainFragment());
-        fragmentTransaction.commit();
+        if(savedInstanceState == null){
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.containerMain, new MainFragment())
+                    .commit();
+            navigationView.setCheckedItem(R.id.home);
+        }
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.home:
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.containerMain, new MainFragment());
-                fragmentTransaction.commit();
+                System.out.print("test");
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.containerMain, new MainFragment())
+                        .commit();
                 break;
             case R.id.animeList:
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.containerMain, new FragmentTwo());
-                fragmentTransaction.commit();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.containerMain, new FragmentTwo())
+                        .commit();
                 break;
             case R.id.mangaList:
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.containerMain, new FragmentThree());
-                fragmentTransaction.commit();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.containerMain, new FragmentThree())
+                        .commit();
                 break;
             case R.id.profile:
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.containerMain, new FragmentFour());
-                fragmentTransaction.commit();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.containerMain, new FragmentFour())
+                        .commit();
                 break;
             case R.id.logOut:
+                Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show();
                 break;
         }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
-    public void onButtonSelected(){
+    public void onBackPressed(){
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+
+        /*
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.containerMain, new FragmentTwo());
-        fragmentTransaction.commit();
+        fragmentTransaction.commit();*/
     }
 }
