@@ -8,16 +8,22 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.github.doomsdayrs.jikan4java.exceptions.IncompatibleEnumException;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     DrawerLayout drawerLayout;
