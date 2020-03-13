@@ -1,11 +1,16 @@
 package com.example.myanimelistapp;
 
 import android.app.ListActivity;
+import android.content.Context;
+import android.hardware.input.InputManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -13,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.github.doomsdayrs.jikan4java.core.Connector;
@@ -24,16 +30,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class FragmentFour extends Fragment {
+public class FragmentFour extends Fragment implements View.OnClickListener{
 
     private User user;
+    protected String username;
+    private Button mButton;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_four,container,false);
+        View not_found = inflater.inflate(R.layout.not_found, container, false);
 
-        user = getUserByUsername("KasuraS");
+        mButton = not_found.findViewById(R.id.button_username_query);
+        mButton.setOnClickListener(this);
+
+        //prevent username for being null
+        if(username == null){
+            return not_found;
+        }
+
+        user = getUserByUsername(username);
+
+        if(user == null) {
+            return not_found;
+        }
 
         TextView username = (TextView) view.findViewById(R.id.user_name);
         username.setText(user.username);
@@ -82,8 +103,6 @@ public class FragmentFour extends Fragment {
         ArrayAdapter ad_manga = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, array_manga_stats);
         manga_stats.setAdapter(ad_manga);
 
-
-
         return view;
     }
 
@@ -95,5 +114,37 @@ public class FragmentFour extends Fragment {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String name) {
+        username = name;
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_username_query:
+                EditText name = getActivity().findViewById(R.id.username_query);
+                String name_string = name.getText().toString();
+                username = name_string;
+                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.detach(this).attach(this).commit();
+                break;
+        }
     }
 }
