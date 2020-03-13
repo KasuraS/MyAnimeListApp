@@ -1,10 +1,13 @@
 package com.example.myanimelistapp;
 
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +21,7 @@ import com.github.doomsdayrs.jikan4java.types.main.user.User;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class FragmentFour extends Fragment {
@@ -43,6 +47,42 @@ public class FragmentFour extends Fragment {
                 .asBitmap()
                 .load(user.image_url)
                 .into(user_image);
+
+        TextView user_gender = (TextView) view.findViewById(R.id.user_gender);
+        user_gender.setText("Gender: " + user.gender);
+
+        TextView user_location = (TextView) view.findViewById(R.id.user_location);
+        if(user.location == null){
+            user_location.setText("Current location : Isekai");
+        } else {
+            user_location.setText("Current location: " + user.location);
+        }
+
+        // Anime stats
+        ListView anime_stats = (ListView) view.findViewById(R.id.user_anime_stats);
+        ArrayList<String> array_anime_stats = new ArrayList<>();
+        array_anime_stats.add("Watching: " + user.animeStats.get(0).watching);
+        array_anime_stats.add("Completed: " + user.animeStats.get(0).completed);
+        array_anime_stats.add("Dropped: " + user.animeStats.get(0).dropped);
+        array_anime_stats.add("On hold: " + user.animeStats.get(0).on_hold);
+        array_anime_stats.add("PTW :" + user.animeStats.get(0).plan_to_watch);
+
+        ArrayAdapter ad_anime = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, array_anime_stats);
+        anime_stats.setAdapter(ad_anime);
+
+        //Manga stats
+        ListView manga_stats = (ListView) view.findViewById(R.id.user_manga_stats);
+        ArrayList<String> array_manga_stats = new ArrayList<>();
+        array_manga_stats.add("Reading: " + user.mangaStats.get(0).reading);
+        array_manga_stats.add("Completed: " + user.mangaStats.get(0).completed);
+        array_manga_stats.add("Dropped: " + user.mangaStats.get(0).dropped);
+        array_manga_stats.add("On hold: " + user.mangaStats.get(0).on_hold);
+        array_manga_stats.add("PTR :" + user.mangaStats.get(0).plan_to_read);
+
+        ArrayAdapter ad_manga = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, array_manga_stats);
+        manga_stats.setAdapter(ad_manga);
+
+
 
         return view;
     }

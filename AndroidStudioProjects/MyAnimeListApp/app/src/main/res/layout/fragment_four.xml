@@ -4,26 +4,100 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/user_img"
-        android:layout_width="200dp"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" />
+        android:id="@+id/top_section">
 
-    <TextView
-        android:id="@+id/user_name"
+        <ImageView
+            android:id="@+id/user_img"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:contentDescription="Profil picture"/>
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/user_img" />
+
+        <TextView
+            android:id="@+id/user_last_online"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_name"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/user_img" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/user_img" />
+        android:layout_below="@+id/top_section"
+        android:id="@+id/section_lists">
 
-    <TextView
-        android:id="@+id/user_last_online"
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_to_animelist"
+            android:text="ANIME LIST"
+            android:layout_alignParentTop="true"
+            android:textAlignment="center"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_to_mangalist"
+            android:text="MANGA LIST"
+            android:layout_below="@+id/button_to_animelist"
+            android:textAlignment="center"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/user_name"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/user_img" />
+        android:layout_below="@+id/section_lists"
+        android:id="@+id/section_infos">
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/user_gender"
+            android:layout_alignParentTop="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/user_location"
+            android:layout_below="@+id/user_gender"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/section_stats"
+        android:layout_below="@+id/section_infos">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/user_anime_stats"
+            android:layout_alignParentTop="true"/>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/user_manga_stats"
+            android:layout_below="@+id/user_anime_stats"/>
+
+    </RelativeLayout>
+
+
 
 </RelativeLayout>
