@@ -45,7 +45,11 @@
                     android:layout_alignParentEnd="true"
                     android:orientation="horizontal"
                     android:icon="@drawable/ic_search_white_24dp"
-                    app:itemIconTint="@color/colorWhite"/>
+                    app:itemIconTint="@color/colorWhite"
+                    app:theme="@style/SearchViewStyle"
+                    android:queryHint="Search..."
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
 
             </RelativeLayout>
 

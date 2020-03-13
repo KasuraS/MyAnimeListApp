@@ -29,7 +29,7 @@ import java.util.concurrent.ExecutionException;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
     private static final String TAG = "RecyclerViewAdapter";
 
-    private ArrayList<TopListing> trendingList = new ArrayList<>();
+    private ArrayList<TopListing> trendingList;
     private ArrayList<String> titles = new ArrayList<>();
     private ArrayList<String> img_url = new ArrayList<>();
     private Context mContext;
@@ -65,8 +65,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked on: " + titles.get(position));
-
-                Toast.makeText(mContext, titles.get(position), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, titles.get(position), Toast.LENGTH_SHORT).show(); // Should redirect you to anime description page
             }
         });
     }
@@ -77,7 +76,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         ImageView image;
         TextView imageName;
         RelativeLayout parentLayout;
@@ -95,6 +93,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         int a = 0;
         while(!core.isDone())a++;
         Top result = core.get();
-        return result.topListings;
+        return result.topListings; // Gets the top ranking animes
     }
 }

@@ -4,33 +4,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.doomsdayrs.jikan4java.core.search.TopSearch;
-import com.github.doomsdayrs.jikan4java.core.search.animemanga.AnimeSearch;
-import com.github.doomsdayrs.jikan4java.enums.top.Tops;
 import com.github.doomsdayrs.jikan4java.exceptions.IncompatibleEnumException;
-import com.github.doomsdayrs.jikan4java.types.main.anime.animePage.AnimePage;
-import com.github.doomsdayrs.jikan4java.types.main.anime.animePage.AnimePageAnime;
-import com.github.doomsdayrs.jikan4java.types.main.manga.mangapage.MangaPageManga;
-import com.github.doomsdayrs.jikan4java.types.main.top.Top;
-import com.github.doomsdayrs.jikan4java.types.main.top.TopListing;
-
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public class FragmentTwo extends Fragment/*, AppCompatActivity*/ {
-
+public class FragmentTwo extends Fragment{
     private View view;
 
     @Nullable

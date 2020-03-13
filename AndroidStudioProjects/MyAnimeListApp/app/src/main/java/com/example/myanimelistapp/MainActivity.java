@@ -6,38 +6,47 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.SearchView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.doomsdayrs.jikan4java.exceptions.IncompatibleEnumException;
 import com.google.android.material.navigation.NavigationView;
-
-import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
     Toolbar toolbar;
     NavigationView navigationView;
+    TextView appTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Change default search icon
+        appTextView = findViewById(R.id.appTextView);
+
+        // Set listeners to SearchView
         SearchView searchView = findViewById(R.id.searchView);
+        searchView.setOnSearchClickListener(v -> appTextView.setVisibility(View.INVISIBLE));
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                appTextView.setVisibility(View.VISIBLE);
+                return false;
+            }
+        });
+
+        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
+        View searchPlate = searchView.findViewById(searchPlateId);
+        searchPlate.setBackgroundResource(R.drawable.search_query_background);
+
+        // Change default search icon
         int searchIconId = getResources().getIdentifier("android:id/search_button", null, null);
         ImageView searchIcon = searchView.findViewById(searchIconId);
         searchIcon.setImageResource(R.drawable.ic_search_white_24dp);
@@ -67,32 +76,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
-            case R.id.home:
+            case R.id.home: // Go to home fragment
                 System.out.print("test");
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.containerMain, new MainFragment())
                         .commit();
                 break;
-            case R.id.animeList:
+            case R.id.animeList: // Go to anime fragment
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.containerMain, new FragmentTwo())
                         .commit();
                 break;
-            case R.id.mangaList:
+            case R.id.mangaList: // Go to manga fragment
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.containerMain, new FragmentThree())
                         .commit();
                 break;
-            case R.id.profile:
+            case R.id.profile: // Go to profile fragment
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.containerMain, new FragmentFour())
                         .commit();
                 break;
-            case R.id.logOut:
+            case R.id.logOut: // Send Toast message
                 Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -108,11 +117,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
-
-        /*
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.containerMain, new FragmentTwo());
-        fragmentTransaction.commit();*/
     }
 }
