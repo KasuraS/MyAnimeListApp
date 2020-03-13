@@ -11,50 +11,57 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.doomsdayrs.jikan4java.core.search.TopSearch;
 import com.github.doomsdayrs.jikan4java.core.search.animemanga.MangaSearch;
+import com.github.doomsdayrs.jikan4java.enums.top.Tops;
+import com.github.doomsdayrs.jikan4java.exceptions.IncompatibleEnumException;
 import com.github.doomsdayrs.jikan4java.types.main.manga.mangapage.MangaPage;
 import com.github.doomsdayrs.jikan4java.types.main.manga.mangapage.MangaPageManga;
+import com.github.doomsdayrs.jikan4java.types.main.top.Top;
+import com.github.doomsdayrs.jikan4java.types.main.top.TopListing;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class FragmentThree extends Fragment {
-    ListView mangaListView;
+    private View view;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_three,container,false);
+        view = inflater.inflate(R.layout.fragment_three,container,false);
 
-        /*mangaListView = getActivity().findViewById(R.id.mangaListView);
-
-        //Manga search function
-        MangaSearch core = new MangaSearch().setQuery("boku");
-        core.setLimit(10); //Set result numbers
-
-        CompletableFuture completableFuture = core.get();
-        int a = 0;
-        while(!completableFuture.isDone())a++;
-
-        List<MangaPageManga> mangaList;
-
-        try{
-            MangaPage resultPage = (MangaPage) completableFuture.get();
-            mangaList = resultPage.mangas;
-
-            final ArrayAdapter<MangaPageManga> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, mangaList);
-            mangaListView.setAdapter(adapter);
-
-            for(MangaPageManga x : resultPage.mangas) {
-                System.out.println(x);
-            }
+        try {
+            initRecyclerView();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (IncompatibleEnumException e) {
+            e.printStackTrace();
         }
-        catch (Exception err){
 
-        }*/
         return view;
+    }
+
+    private void initRecyclerView() throws InterruptedException, ExecutionException, IncompatibleEnumException {
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity(), new ArrayList(retrieveTrending()));
+        RecyclerView recyclerView = view.findViewById(R.id.recycle_view_manga);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    private ArrayList<TopListing> retrieveTrending() throws IncompatibleEnumException, ExecutionException, InterruptedException {
+        CompletableFuture<Top> core = new TopSearch().searchTop(Tops.MANGA);
+        int a = 0;
+        while(!core.isDone())a++;
+        Top result = core.get();
+        return result.topListings; // Gets the top ranking mangas
     }
 }

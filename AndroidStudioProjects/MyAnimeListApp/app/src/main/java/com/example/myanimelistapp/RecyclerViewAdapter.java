@@ -34,8 +34,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList<String> img_url = new ArrayList<>();
     private Context mContext;
 
-    public RecyclerViewAdapter(Context context) throws InterruptedException, ExecutionException, IncompatibleEnumException {
-        this.trendingList = this.retrieveTrending();
+    public RecyclerViewAdapter(Context context, ArrayList list) throws InterruptedException, ExecutionException, IncompatibleEnumException {
+        this.trendingList = list;
         mContext = context;
         for(TopListing x: trendingList) {
             titles.add(x.title);
@@ -86,13 +86,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             imageName = itemView.findViewById(R.id.image_name);
             parentLayout = itemView.findViewById(R.id.parent_layout);
         }
-    }
-
-    private ArrayList<TopListing> retrieveTrending() throws IncompatibleEnumException, ExecutionException, InterruptedException {
-        CompletableFuture<Top> core = new TopSearch().searchTop(Tops.ANIME);
-        int a = 0;
-        while(!core.isDone())a++;
-        Top result = core.get();
-        return result.topListings; // Gets the top ranking animes
     }
 }
