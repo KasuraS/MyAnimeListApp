@@ -45,16 +45,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/button_to_animelist"
-            android:text="ANIME LIST"
+            android:text="LISTS"
             android:layout_alignParentTop="true"
-            android:textAlignment="center"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/button_to_mangalist"
-            android:text="MANGA LIST"
-            android:layout_below="@+id/button_to_animelist"
             android:textAlignment="center"/>
 
     </RelativeLayout>

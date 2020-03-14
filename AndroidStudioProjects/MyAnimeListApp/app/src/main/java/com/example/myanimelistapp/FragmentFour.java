@@ -110,8 +110,6 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
 
         Button buttonAnimeList = view.findViewById(R.id.button_to_animelist);
         buttonAnimeList.setOnClickListener(this);
-        Button buttonMangaList = view.findViewById(R.id.button_to_mangalist);
-        buttonMangaList.setOnClickListener(this);
 
         return view;
     }
@@ -157,7 +155,6 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
                 ft.detach(this).attach(this).commit();
                 break;
             case R.id.button_to_animelist:
-            case R.id.button_to_mangalist:
                 ft =  getFragmentManager().beginTransaction();
                 ft.replace(R.id.containerMain, new ListFragment()).commit();
                 break;
