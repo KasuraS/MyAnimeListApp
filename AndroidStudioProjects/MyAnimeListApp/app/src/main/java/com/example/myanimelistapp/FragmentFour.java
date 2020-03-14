@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.hardware.input.InputManager;
 import android.os.Bundle;
+import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
 
     protected static User user;
     protected static String username;
+    private View view;
     private Button mButton;
     private Button AnimeListButton;
     private Button MangaListButton;
@@ -41,7 +43,7 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_four,container,false);
+        view = inflater.inflate(R.layout.fragment_four,container,false);
         View not_found = inflater.inflate(R.layout.not_found, container, false);
 
         //prevent username for being null
@@ -58,6 +60,9 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
             mButton.setOnClickListener(this);
             return not_found;
         }
+
+        AnimeListButton = view.findViewById(R.id.button_to_animelist);
+        AnimeListButton.setOnClickListener(this);
 
         TextView username = (TextView) view.findViewById(R.id.user_name);
         username.setText(user.username);
@@ -138,6 +143,7 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        FragmentTransaction ft;
         switch (v.getId()) {
             case R.id.button_username_query:
                 EditText name = getActivity().findViewById(R.id.username_query);
@@ -145,8 +151,12 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
                 username = name_string;
                 InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft =  getFragmentManager().beginTransaction();
                 ft.detach(this).attach(this).commit();
+                break;
+            case R.id.button_to_animelist:
+                ft =  getFragmentManager().beginTransaction();
+                ft.replace(R.id.containerMain, new ListFragment()).commit();
                 break;
         }
     }

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.doomsdayrs.jikan4java.core.userlisting.AnimeUserListingSearch;
 import com.github.doomsdayrs.jikan4java.core.userlisting.MangaUserListingSearch;
 import com.github.doomsdayrs.jikan4java.exceptions.IncompatibleEnumException;
+import com.github.doomsdayrs.jikan4java.types.main.manga.Manga;
 import com.github.doomsdayrs.jikan4java.types.main.user.listing.animelist.AnimeList;
 import com.github.doomsdayrs.jikan4java.types.main.user.listing.animelist.AnimeListAnime;
 import com.github.doomsdayrs.jikan4java.types.main.user.listing.mangalist.MangaList;
@@ -34,7 +35,6 @@ public class ListFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_list, container, false);
 
         //Copy FragmentFour code
-
 
         super.onCreate(savedInstanceState);
         TabHost tabs = (TabHost) view.findViewById(R.id.tabhost);
@@ -62,7 +62,7 @@ public class ListFragment extends Fragment {
         return view;
     }
 
-    private ArrayList<AnimeListAnime> retrieveAnimeList() throws ExecutionException, InterruptedException {
+    private AnimeList retrieveAnimeList() throws ExecutionException, InterruptedException {
         AnimeUserListingSearch core = FragmentFour.user.getAnimeListSearch();
 
         CompletableFuture completableFuture = core.getList();
@@ -70,10 +70,10 @@ public class ListFragment extends Fragment {
         while(!completableFuture.isDone())a++;
         AnimeList result = (AnimeList) completableFuture.get();
 
-        return result.animes;
+        return result;
     }
 
-    private ArrayList<MangaListManga> retrieveMangaList() throws ExecutionException, InterruptedException {
+    private MangaList retrieveMangaList() throws ExecutionException, InterruptedException {
         MangaUserListingSearch core = FragmentFour.user.getMangaListSearch();
 
         CompletableFuture completableFuture = core.getList();
@@ -81,18 +81,18 @@ public class ListFragment extends Fragment {
         while(!completableFuture.isDone())a++;
         MangaList result = (MangaList) completableFuture.get();
 
-        return result.mangas;
+        return result;
     }
 
     private void anime_initRecyclerView() throws ExecutionException, InterruptedException, IncompatibleEnumException {
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity(), new ArrayList(retrieveAnimeList()));
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity(), retrieveAnimeList());
         RecyclerView recyclerView = view.findViewById(R.id.tab_anime_recycleView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     private void manga_initRecycleView() throws ExecutionException, InterruptedException, IncompatibleEnumException {
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity(), new ArrayList(retrieveMangaList()));
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity(), retrieveMangaList());
         RecyclerView recyclerView = view.findViewById(R.id.tab_manga_recycleView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
