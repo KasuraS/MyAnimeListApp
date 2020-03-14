@@ -32,9 +32,11 @@ import java.util.concurrent.ExecutionException;
 
 public class FragmentFour extends Fragment implements View.OnClickListener{
 
-    private User user;
-    protected String username;
+    protected static User user;
+    protected static String username;
     private Button mButton;
+    private Button AnimeListButton;
+    private Button MangaListButton;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -42,17 +44,18 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
         View view = inflater.inflate(R.layout.fragment_four,container,false);
         View not_found = inflater.inflate(R.layout.not_found, container, false);
 
-        mButton = not_found.findViewById(R.id.button_username_query);
-        mButton.setOnClickListener(this);
-
         //prevent username for being null
         if(username == null){
+            mButton = not_found.findViewById(R.id.button_username_query);
+            mButton.setOnClickListener(this);
             return not_found;
         }
 
         user = getUserByUsername(username);
 
         if(user == null) {
+            mButton = not_found.findViewById(R.id.button_username_query);
+            mButton.setOnClickListener(this);
             return not_found;
         }
 

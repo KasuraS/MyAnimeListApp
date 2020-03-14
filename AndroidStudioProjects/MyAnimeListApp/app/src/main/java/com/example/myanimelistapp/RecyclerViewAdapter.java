@@ -21,6 +21,10 @@ import com.github.doomsdayrs.jikan4java.enums.top.Tops;
 import com.github.doomsdayrs.jikan4java.exceptions.IncompatibleEnumException;
 import com.github.doomsdayrs.jikan4java.types.main.top.Top;
 import com.github.doomsdayrs.jikan4java.types.main.top.TopListing;
+import com.github.doomsdayrs.jikan4java.types.main.user.listing.animelist.AnimeList;
+import com.github.doomsdayrs.jikan4java.types.main.user.listing.animelist.AnimeListAnime;
+import com.github.doomsdayrs.jikan4java.types.main.user.listing.mangalist.MangaList;
+import com.github.doomsdayrs.jikan4java.types.main.user.listing.mangalist.MangaListManga;
 
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
@@ -29,15 +33,31 @@ import java.util.concurrent.ExecutionException;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
     private static final String TAG = "RecyclerViewAdapter";
 
-    private ArrayList<TopListing> trendingList;
     private ArrayList<String> titles = new ArrayList<>();
     private ArrayList<String> img_url = new ArrayList<>();
     private Context mContext;
 
-    public RecyclerViewAdapter(Context context, ArrayList list) throws InterruptedException, ExecutionException, IncompatibleEnumException {
-        this.trendingList = list;
+    public RecyclerViewAdapter(Context context, ArrayList<TopListing> list) throws InterruptedException, ExecutionException, IncompatibleEnumException {
         mContext = context;
-        for(TopListing x: trendingList) {
+        for(TopListing x: list) {
+            titles.add(x.title);
+            img_url.add(x.image_url);
+        }
+    }
+
+    //Constructor for personal anime list
+    public RecyclerViewAdapter(Context context, AnimeList list){
+        mContext = context;
+        for(AnimeListAnime x : list.animes) {
+            titles.add(x.title);
+            img_url.add(x.image_url);
+        }
+    }
+
+    //Constructor for personal manga list
+    public RecyclerViewAdapter(Context context, MangaList list) {
+        mContext = context;
+        for(MangaListManga x : list.mangas) {
             titles.add(x.title);
             img_url.add(x.image_url);
         }

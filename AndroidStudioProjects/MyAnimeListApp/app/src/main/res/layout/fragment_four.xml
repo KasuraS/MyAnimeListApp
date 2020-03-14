@@ -46,7 +46,8 @@
             android:id="@+id/button_to_animelist"
             android:text="ANIME LIST"
             android:layout_alignParentTop="true"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            android:onClick="on_call_animeList"/>
 
         <Button
             android:layout_width="match_parent"
@@ -54,7 +55,8 @@
             android:id="@+id/button_to_mangalist"
             android:text="MANGA LIST"
             android:layout_below="@+id/button_to_animelist"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            android:onClick="on_call_mangaList"/>
 
     </RelativeLayout>
 
