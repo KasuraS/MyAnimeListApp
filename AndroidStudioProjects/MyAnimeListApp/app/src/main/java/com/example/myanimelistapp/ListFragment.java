@@ -17,7 +17,6 @@ import com.github.doomsdayrs.jikan4java.core.userlisting.MangaUserListingSearch;
 import com.github.doomsdayrs.jikan4java.exceptions.IncompatibleEnumException;
 import com.github.doomsdayrs.jikan4java.types.main.user.listing.animelist.AnimeList;
 import com.github.doomsdayrs.jikan4java.types.main.user.listing.mangalist.MangaList;
-
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 

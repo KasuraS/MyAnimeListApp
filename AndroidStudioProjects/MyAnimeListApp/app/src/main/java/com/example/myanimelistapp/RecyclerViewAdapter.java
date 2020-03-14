@@ -28,7 +28,6 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
     private static final String TAG = "RecyclerViewAdapter";
 
-    private ArrayList<TopListing> trendingList;
     private ArrayList<String> titles = new ArrayList<>();
     private ArrayList<String> img_url = new ArrayList<>();
     private Context mContext;

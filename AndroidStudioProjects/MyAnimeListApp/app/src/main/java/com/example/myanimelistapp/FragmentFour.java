@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.hardware.input.InputManager;
 import android.os.Bundle;
+import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
 
     protected static User user;
     protected static String username;
+    private View view;
     private Button mButton;
     private Button AnimeListButton;
     private Button MangaListButton;
@@ -41,7 +43,7 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_four,container,false);
+        view = inflater.inflate(R.layout.fragment_four,container,false);
         View not_found = inflater.inflate(R.layout.not_found, container, false);
 
         //prevent username for being null
@@ -58,7 +60,6 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
             mButton.setOnClickListener(this);
             return not_found;
         }
-
         TextView username = view.findViewById(R.id.user_name);
         username.setText(user.username);
 
@@ -66,6 +67,7 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
         last_online.setText(user.last_online);
 
         ImageView user_image = view.findViewById(R.id.user_img);
+
         Glide.with(getActivity())
                 .asBitmap()
                 .load(user.image_url)
@@ -77,6 +79,7 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
         TextView user_location = view.findViewById(R.id.user_location);
         if(user.location == null){
             user_location.setText("Current location: Isekai");
+
         } else {
             user_location.setText("Current location: " + user.location);
         }
@@ -93,14 +96,14 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
         ArrayAdapter ad_anime = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, array_anime_stats);
         anime_stats.setAdapter(ad_anime);
 
-        // Manga stats
-        ListView manga_stats = view.findViewById(R.id.user_manga_stats);
+        //Manga stats
+        ListView manga_stats = (ListView) view.findViewById(R.id.user_manga_stats);
         ArrayList<String> array_manga_stats = new ArrayList<>();
-        array_anime_stats.add("Watching: " + user.mangaStats.get(0).reading);
-        array_anime_stats.add("Completed: " + user.mangaStats.get(0).completed);
-        array_anime_stats.add("Dropped: " + user.mangaStats.get(0).dropped);
-        array_anime_stats.add("On hold: " + user.mangaStats.get(0).on_hold);
-        array_anime_stats.add("Plan to Read: " + user.mangaStats.get(0).plan_to_read);
+        array_manga_stats.add("Reading: " + user.mangaStats.get(0).reading);
+        array_manga_stats.add("Completed: " + user.mangaStats.get(0).completed);
+        array_manga_stats.add("Dropped: " + user.mangaStats.get(0).dropped);
+        array_manga_stats.add("On hold: " + user.mangaStats.get(0).on_hold);
+        array_manga_stats.add("PTR :" + user.mangaStats.get(0).plan_to_read);
 
         ArrayAdapter ad_manga = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, array_manga_stats);
         manga_stats.setAdapter(ad_manga);
