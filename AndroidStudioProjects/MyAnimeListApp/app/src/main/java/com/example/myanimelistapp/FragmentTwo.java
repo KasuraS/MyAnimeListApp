@@ -44,13 +44,14 @@ public class FragmentTwo extends Fragment{
     }
 
     private void initRecyclerView() throws InterruptedException, ExecutionException, IncompatibleEnumException {
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity(), new ArrayList(retrieveTrending()));
-        RecyclerView recyclerView = view.findViewById(R.id.recycle_view);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity(), retrieveTrending(), this);
+        RecyclerView recyclerView = view.findViewById(R.id.recycle_view_anime);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private ArrayList<TopListing> retrieveTrending() throws IncompatibleEnumException, ExecutionException, InterruptedException {
+    private ArrayList<TopListing> retrieveTrending() throws
+            IncompatibleEnumException, ExecutionException, InterruptedException {
         CompletableFuture<Top> core = new TopSearch().searchTop(Tops.ANIME);
         int a = 0;
         while(!core.isDone())a++;

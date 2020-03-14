@@ -2,7 +2,6 @@ package com.example.myanimelistapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.github.doomsdayrs.jikan4java.core.search.TopSearch;
-import com.github.doomsdayrs.jikan4java.enums.top.Tops;
 import com.github.doomsdayrs.jikan4java.exceptions.IncompatibleEnumException;
-import com.github.doomsdayrs.jikan4java.types.main.top.Top;
 import com.github.doomsdayrs.jikan4java.types.main.top.TopListing;
 import com.github.doomsdayrs.jikan4java.types.main.user.listing.animelist.AnimeList;
 import com.github.doomsdayrs.jikan4java.types.main.user.listing.animelist.AnimeListAnime;
@@ -27,8 +24,6 @@ import com.github.doomsdayrs.jikan4java.types.main.user.listing.mangalist.MangaL
 import com.github.doomsdayrs.jikan4java.types.main.user.listing.mangalist.MangaListManga;
 
 import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
     private static final String TAG = "RecyclerViewAdapter";
@@ -36,8 +31,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList<String> titles = new ArrayList<>();
     private ArrayList<String> img_url = new ArrayList<>();
     private Context mContext;
+    private Class fragment;
 
-    public RecyclerViewAdapter(Context context, ArrayList<TopListing> list) throws InterruptedException, ExecutionException, IncompatibleEnumException {
+    public RecyclerViewAdapter(Context context, ArrayList<TopListing> list, Fragment frag) {
+        fragment = frag.getClass();
         mContext = context;
         for(TopListing x: list) {
             titles.add(x.title);
@@ -85,7 +82,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked on: " + titles.get(position));
-                Toast.makeText(mContext, titles.get(position), Toast.LENGTH_SHORT).show(); // Should redirect you to anime description page
+                Toast.makeText(mContext, titles.get(position), Toast.LENGTH_SHORT).show();
+
+                Intent intent;
+                if(fragment == FragmentTwo.class){
+                    intent = new Intent(mContext, AnimeDescActivity.class);
+                }
+                else{
+                    intent = new Intent(mContext, MangaDescActivity.class);
+                }
+                intent.putExtra("image_url", img_url.get(position));
+                intent.putExtra("title", titles.get(position));
+                mContext.startActivity(intent);
             }
         });
     }

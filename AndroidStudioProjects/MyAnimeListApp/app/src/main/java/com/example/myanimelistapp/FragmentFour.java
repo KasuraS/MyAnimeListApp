@@ -60,41 +60,38 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
             mButton.setOnClickListener(this);
             return not_found;
         }
-
-        AnimeListButton = view.findViewById(R.id.button_to_animelist);
-        AnimeListButton.setOnClickListener(this);
-
-        TextView username = (TextView) view.findViewById(R.id.user_name);
+        TextView username = view.findViewById(R.id.user_name);
         username.setText(user.username);
 
-        TextView last_online = (TextView) view.findViewById(R.id.user_last_online);
-        username.setText(user.last_online);
+        TextView last_online = view.findViewById(R.id.user_last_online);
+        last_online.setText(user.last_online);
 
-        ImageView user_image = (ImageView) view.findViewById(R.id.user_img);
+        ImageView user_image = view.findViewById(R.id.user_img);
 
         Glide.with(getActivity())
                 .asBitmap()
                 .load(user.image_url)
                 .into(user_image);
 
-        TextView user_gender = (TextView) view.findViewById(R.id.user_gender);
+        TextView user_gender = view.findViewById(R.id.user_gender);
         user_gender.setText("Gender: " + user.gender);
 
-        TextView user_location = (TextView) view.findViewById(R.id.user_location);
+        TextView user_location = view.findViewById(R.id.user_location);
         if(user.location == null){
-            user_location.setText("Current location : Isekai");
+            user_location.setText("Current location: Isekai");
+
         } else {
             user_location.setText("Current location: " + user.location);
         }
 
         // Anime stats
-        ListView anime_stats = (ListView) view.findViewById(R.id.user_anime_stats);
+        ListView anime_stats = view.findViewById(R.id.user_anime_stats);
         ArrayList<String> array_anime_stats = new ArrayList<>();
         array_anime_stats.add("Watching: " + user.animeStats.get(0).watching);
         array_anime_stats.add("Completed: " + user.animeStats.get(0).completed);
         array_anime_stats.add("Dropped: " + user.animeStats.get(0).dropped);
         array_anime_stats.add("On hold: " + user.animeStats.get(0).on_hold);
-        array_anime_stats.add("PTW :" + user.animeStats.get(0).plan_to_watch);
+        array_anime_stats.add("Plan to Watch: " + user.animeStats.get(0).plan_to_watch);
 
         ArrayAdapter ad_anime = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, array_anime_stats);
         anime_stats.setAdapter(ad_anime);
@@ -111,14 +108,19 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
         ArrayAdapter ad_manga = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, array_manga_stats);
         manga_stats.setAdapter(ad_manga);
 
+        Button buttonAnimeList = view.findViewById(R.id.button_to_animelist);
+        buttonAnimeList.setOnClickListener(this);
+        Button buttonMangaList = view.findViewById(R.id.button_to_mangalist);
+        buttonMangaList.setOnClickListener(this);
+
         return view;
     }
 
-    private User getUserByUsername(String username) {
+    private User getUserByUsername(String username){
         try{
             User user = new Connector().userRetrieve(username).get();
             return user;
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e){
             e.printStackTrace();
         }
         return null;
@@ -155,6 +157,7 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
                 ft.detach(this).attach(this).commit();
                 break;
             case R.id.button_to_animelist:
+            case R.id.button_to_mangalist:
                 ft =  getFragmentManager().beginTransaction();
                 ft.replace(R.id.containerMain, new ListFragment()).commit();
                 break;

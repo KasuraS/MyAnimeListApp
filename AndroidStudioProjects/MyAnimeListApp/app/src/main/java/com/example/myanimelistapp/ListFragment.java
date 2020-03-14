@@ -15,13 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.doomsdayrs.jikan4java.core.userlisting.AnimeUserListingSearch;
 import com.github.doomsdayrs.jikan4java.core.userlisting.MangaUserListingSearch;
 import com.github.doomsdayrs.jikan4java.exceptions.IncompatibleEnumException;
-import com.github.doomsdayrs.jikan4java.types.main.manga.Manga;
 import com.github.doomsdayrs.jikan4java.types.main.user.listing.animelist.AnimeList;
-import com.github.doomsdayrs.jikan4java.types.main.user.listing.animelist.AnimeListAnime;
 import com.github.doomsdayrs.jikan4java.types.main.user.listing.mangalist.MangaList;
-import com.github.doomsdayrs.jikan4java.types.main.user.listing.mangalist.MangaListManga;
-
-import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -37,7 +32,7 @@ public class ListFragment extends Fragment {
         //Copy FragmentFour code
 
         super.onCreate(savedInstanceState);
-        TabHost tabs = (TabHost) view.findViewById(R.id.tabhost);
+        TabHost tabs = view.findViewById(R.id.tabhost);
         tabs.setup();
         TabHost.TabSpec spec = tabs.newTabSpec("tag1");
         spec.setContent(R.id.tab1);
@@ -97,6 +92,4 @@ public class ListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
-
-
 }

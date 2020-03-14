@@ -4,31 +4,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.github.doomsdayrs.jikan4java.core.search.TopSearch;
-import com.github.doomsdayrs.jikan4java.core.search.animemanga.MangaSearch;
 import com.github.doomsdayrs.jikan4java.enums.top.Tops;
 import com.github.doomsdayrs.jikan4java.exceptions.IncompatibleEnumException;
-import com.github.doomsdayrs.jikan4java.types.main.manga.mangapage.MangaPage;
-import com.github.doomsdayrs.jikan4java.types.main.manga.mangapage.MangaPageManga;
 import com.github.doomsdayrs.jikan4java.types.main.top.Top;
 import com.github.doomsdayrs.jikan4java.types.main.top.TopListing;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public class FragmentThree extends Fragment {
+public class FragmentThree extends Fragment{
     private View view;
 
     @Nullable
@@ -48,6 +40,22 @@ public class FragmentThree extends Fragment {
         }
 
         return view;
+    }
+
+    private void initRecyclerView() throws InterruptedException, ExecutionException, IncompatibleEnumException {
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity(), retrieveTrending(), this);
+        RecyclerView recyclerView = view.findViewById(R.id.recycle_view_manga);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    private ArrayList<TopListing> retrieveTrending() throws
+            IncompatibleEnumException, ExecutionException, InterruptedException {
+        CompletableFuture<Top> core = new TopSearch().searchTop(Tops.MANGA);
+        int a = 0;
+        while(!core.isDone())a++;
+        Top result = core.get();
+        return result.topListings; // Gets the top ranking mangas
     }
 
     private void initRecyclerView() throws InterruptedException, ExecutionException, IncompatibleEnumException {
