@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         layout="@layout/drawer_toolbar2"/>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -32,6 +32,11 @@
         android:layout_width="240dp"
         android:id="@+id/animeImage"
         android:layout_gravity="center"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/description_list_anime"/>
 
 </LinearLayout>
 

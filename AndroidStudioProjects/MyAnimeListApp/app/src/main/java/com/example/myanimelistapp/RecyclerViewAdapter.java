@@ -16,7 +16,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.github.doomsdayrs.jikan4java.core.Connector;
 import com.github.doomsdayrs.jikan4java.exceptions.IncompatibleEnumException;
+import com.github.doomsdayrs.jikan4java.types.main.anime.Anime;
 import com.github.doomsdayrs.jikan4java.types.main.top.TopListing;
 import com.github.doomsdayrs.jikan4java.types.main.user.listing.animelist.AnimeList;
 import com.github.doomsdayrs.jikan4java.types.main.user.listing.animelist.AnimeListAnime;
@@ -24,12 +26,14 @@ import com.github.doomsdayrs.jikan4java.types.main.user.listing.mangalist.MangaL
 import com.github.doomsdayrs.jikan4java.types.main.user.listing.mangalist.MangaListManga;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
     private static final String TAG = "RecyclerViewAdapter";
 
     private ArrayList<String> titles = new ArrayList<>();
     private ArrayList<String> img_url = new ArrayList<>();
+    private ArrayList<Integer> ids = new ArrayList<>();
     private Context mContext;
     private Class fragment;
 
@@ -39,6 +43,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         for(TopListing x: list) {
             titles.add(x.title);
             img_url.add(x.image_url);
+            ids.add(x.mal_id);
         }
     }
 
@@ -48,6 +53,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         for(AnimeListAnime x : list.animes) {
             titles.add(x.title);
             img_url.add(x.image_url);
+            ids.add(x.mal_id);
         }
     }
 
@@ -57,6 +63,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         for(MangaListManga x : list.mangas) {
             titles.add(x.title);
             img_url.add(x.image_url);
+            ids.add(x.mal_id);
         }
     }
 
@@ -93,6 +100,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 }
                 intent.putExtra("image_url", img_url.get(position));
                 intent.putExtra("title", titles.get(position));
+                intent.putExtra("animeID", ids.get(position));
                 mContext.startActivity(intent);
             }
         });
