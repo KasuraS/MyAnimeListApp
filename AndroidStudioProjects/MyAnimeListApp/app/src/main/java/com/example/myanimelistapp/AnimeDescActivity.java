@@ -85,12 +85,12 @@ public class AnimeDescActivity extends AppCompatActivity {
             genres = genres.concat(genre.name + " ");
             System.out.println(genre.name);
         }
-        elements.add("Studios: " + genres);
         String studios = "";
         for(Studios studio: anime.studios) {
             studios = studios.concat(studio.name + " ");
         }
-        elements.add("Genres: " + studios);
+        elements.add("Genres: " + genres);
+        elements.add("Studios: " + studios);
 
         ListView descriptions = (ListView) findViewById(R.id.description_list_anime);
         ArrayAdapter ad_anime = new ArrayAdapter(this, android.R.layout.simple_list_item_1, elements);
