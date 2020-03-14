@@ -2,7 +2,6 @@ package com.example.myanimelistapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,18 +12,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.github.doomsdayrs.jikan4java.core.search.TopSearch;
-import com.github.doomsdayrs.jikan4java.enums.top.Tops;
 import com.github.doomsdayrs.jikan4java.exceptions.IncompatibleEnumException;
-import com.github.doomsdayrs.jikan4java.types.main.top.Top;
 import com.github.doomsdayrs.jikan4java.types.main.top.TopListing;
+import com.github.doomsdayrs.jikan4java.types.main.user.listing.animelist.AnimeList;
+import com.github.doomsdayrs.jikan4java.types.main.user.listing.animelist.AnimeListAnime;
+import com.github.doomsdayrs.jikan4java.types.main.user.listing.mangalist.MangaList;
+import com.github.doomsdayrs.jikan4java.types.main.user.listing.mangalist.MangaListManga;
 
 import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
     private static final String TAG = "RecyclerViewAdapter";
@@ -33,11 +32,30 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList<String> titles = new ArrayList<>();
     private ArrayList<String> img_url = new ArrayList<>();
     private Context mContext;
+    private Class fragment;
 
-    public RecyclerViewAdapter(Context context) throws InterruptedException, ExecutionException, IncompatibleEnumException {
-        this.trendingList = this.retrieveTrending();
+    public RecyclerViewAdapter(Context context, ArrayList<TopListing> list, Fragment frag) {
+        fragment = frag.getClass();
         mContext = context;
-        for(TopListing x: trendingList) {
+        for(TopListing x: list) {
+            titles.add(x.title);
+            img_url.add(x.image_url);
+        }
+    }
+
+    //Constructor for personal anime list
+    public RecyclerViewAdapter(Context context, AnimeList list){
+        mContext = context;
+        for(AnimeListAnime x : list.animes) {
+            titles.add(x.title);
+            img_url.add(x.image_url);
+        }
+    }
+
+    //Constructor for personal manga list
+    public RecyclerViewAdapter(Context context, MangaList list) {
+        mContext = context;
+        for(MangaListManga x : list.mangas) {
             titles.add(x.title);
             img_url.add(x.image_url);
         }
@@ -65,7 +83,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked on: " + titles.get(position));
-                Toast.makeText(mContext, titles.get(position), Toast.LENGTH_SHORT).show(); // Should redirect you to anime description page
+                Toast.makeText(mContext, titles.get(position), Toast.LENGTH_SHORT).show();
+
+                Intent intent;
+                if(fragment == FragmentTwo.class){
+                    intent = new Intent(mContext, AnimeDescActivity.class);
+                }
+                else{
+                    intent = new Intent(mContext, MangaDescActivity.class);
+                }
+                intent.putExtra("image_url", img_url.get(position));
+                intent.putExtra("title", titles.get(position));
+                mContext.startActivity(intent);
             }
         });
     }
@@ -86,13 +115,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             imageName = itemView.findViewById(R.id.image_name);
             parentLayout = itemView.findViewById(R.id.parent_layout);
         }
-    }
-
-    private ArrayList<TopListing> retrieveTrending() throws IncompatibleEnumException, ExecutionException, InterruptedException {
-        CompletableFuture<Top> core = new TopSearch().searchTop(Tops.ANIME);
-        int a = 0;
-        while(!core.isDone())a++;
-        Top result = core.get();
-        return result.topListings; // Gets the top ranking animes
     }
 }

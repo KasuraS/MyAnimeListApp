@@ -11,7 +11,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.doomsdayrs.jikan4java.core.search.TopSearch;
+import com.github.doomsdayrs.jikan4java.enums.top.Tops;
 import com.github.doomsdayrs.jikan4java.exceptions.IncompatibleEnumException;
+import com.github.doomsdayrs.jikan4java.types.main.top.Top;
+import com.github.doomsdayrs.jikan4java.types.main.top.TopListing;
+
+import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class FragmentTwo extends Fragment{
@@ -37,10 +44,19 @@ public class FragmentTwo extends Fragment{
     }
 
     private void initRecyclerView() throws InterruptedException, ExecutionException, IncompatibleEnumException {
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity());
-        RecyclerView recyclerView = view.findViewById(R.id.recycle_view);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity(), retrieveTrending(), this);
+        RecyclerView recyclerView = view.findViewById(R.id.recycle_view_anime);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    private ArrayList<TopListing> retrieveTrending() throws
+            IncompatibleEnumException, ExecutionException, InterruptedException {
+        CompletableFuture<Top> core = new TopSearch().searchTop(Tops.ANIME);
+        int a = 0;
+        while(!core.isDone())a++;
+        Top result = core.get();
+        return result.topListings; // Gets the top ranking animes
     }
 }
 

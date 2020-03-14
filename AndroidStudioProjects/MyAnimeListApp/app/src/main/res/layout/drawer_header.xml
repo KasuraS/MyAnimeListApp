@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="180dp"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorBlue"
     android:gravity="bottom"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
@@ -26,4 +26,4 @@
         android:layout_height="wrap_content"
         android:text="admin@mal.com"/>
 
-    </LinearLayout>
+</LinearLayout>

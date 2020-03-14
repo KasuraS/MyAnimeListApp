@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        // Add search bar
         int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
         View searchPlate = searchView.findViewById(searchPlateId);
         searchPlate.setBackgroundResource(R.drawable.search_query_background);
