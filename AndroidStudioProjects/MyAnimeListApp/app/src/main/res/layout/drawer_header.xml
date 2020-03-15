@@ -12,18 +12,21 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher_round"/>
+        android:src="@mipmap/ic_launcher"
+        android:id="@+id/profile_photo_in_header"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:text="Administrator"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+        android:text="@string/admin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:id="@+id/username_in_header"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="admin@mal.com"/>
+        android:text="@string/catchphrase"
+        android:id="@+id/catchphrase_in_header"/>
 
 </LinearLayout>

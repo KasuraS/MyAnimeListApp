@@ -8,6 +8,7 @@ import android.widget.TabHost;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,10 +29,11 @@ public class ListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_list, container, false);
-
-        //Copy FragmentFour code
-
         super.onCreate(savedInstanceState);
+
+        Toolbar toolbar = view.findViewById(R.id.toolBar2);
+        toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
+
         TabHost tabs = view.findViewById(R.id.tabhost);
         tabs.setup();
         TabHost.TabSpec spec = tabs.newTabSpec("tag1");

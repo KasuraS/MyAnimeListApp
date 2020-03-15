@@ -1,6 +1,5 @@
 package com.example.myanimelistapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -8,9 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -25,12 +22,7 @@ public class AnimeDescActivity extends AppCompatActivity {
         Log.d(TAG, "onCreated started.");
 
         Toolbar toolbar = findViewById(R.id.toolBar2);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         getIncomingIntent();
     }
