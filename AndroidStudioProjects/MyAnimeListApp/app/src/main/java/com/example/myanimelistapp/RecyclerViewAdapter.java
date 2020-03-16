@@ -34,9 +34,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList<String> titles = new ArrayList<>();
     private ArrayList<String> img_url = new ArrayList<>();
     private ArrayList<Integer> ids = new ArrayList<>();
+    private ArrayList<String> tags = new ArrayList<>();
     private Context mContext;
     private Class fragment;
 
+    // Constructor for top ranking list
     public RecyclerViewAdapter(Context context, ArrayList<TopListing> list, Fragment frag) {
         fragment = frag.getClass();
         mContext = context;
@@ -47,23 +49,25 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    //Constructor for personal anime list
+    // Constructor for personal anime list
     public RecyclerViewAdapter(Context context, AnimeList list){
         mContext = context;
         for(AnimeListAnime x : list.animes) {
             titles.add(x.title);
             img_url.add(x.image_url);
             ids.add(x.mal_id);
+            tags.add("A");
         }
     }
 
-    //Constructor for personal manga list
+    // Constructor for personal manga list
     public RecyclerViewAdapter(Context context, MangaList list) {
         mContext = context;
         for(MangaListManga x : list.mangas) {
             titles.add(x.title);
             img_url.add(x.image_url);
             ids.add(x.mal_id);
+            tags.add("M");
         }
     }
 
@@ -91,11 +95,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Log.d(TAG, "onClick: clicked on: " + titles.get(position));
                 Toast.makeText(mContext, titles.get(position), Toast.LENGTH_SHORT).show();
 
+                String type = "";
+                if(!tags.isEmpty())
+                    type = tags.get(position);
+
                 Intent intent;
-                if(fragment == FragmentTwo.class){
+                if(fragment == FragmentTwo.class || type == "A"){
                     intent = new Intent(mContext, AnimeDescActivity.class);
                 }
-                else{
+                else {
                     intent = new Intent(mContext, MangaDescActivity.class);
                 }
                 intent.putExtra("image_url", img_url.get(position));
