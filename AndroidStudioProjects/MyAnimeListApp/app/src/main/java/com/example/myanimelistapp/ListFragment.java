@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,7 +33,11 @@ public class ListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         Toolbar toolbar = view.findViewById(R.id.toolBar2);
-        toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
+        toolbar.setNavigationOnClickListener(v -> getActivity().getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.containerMain, new FragmentManager().getFragment(), "findThisFragment")
+                    .addToBackStack(null)
+                    .commit());
 
         TabHost tabs = view.findViewById(R.id.tabhost);
         tabs.setup();
