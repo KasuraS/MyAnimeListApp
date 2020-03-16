@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,6 +22,14 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import org.apache.commons.lang.ObjectUtils;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -31,6 +40,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            Deserialize();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         setContentView(R.layout.activity_main);
         appTextView = findViewById(R.id.appTextView);
 
@@ -139,6 +157,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Re-init
                 FragmentFour.setUser(null);
                 FragmentFour.setUsername(null);
+                try {
+                    new FragmentFour().Serialize();
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
                 TextView username_in_header = findViewById(R.id.username_in_header);
                 username_in_header.setText(R.string.admin);
                 ImageView profile_photo_in_header = findViewById(R.id.profile_photo_in_header);
@@ -163,5 +186,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void Deserialize() throws IOException, ClassNotFoundException {
+        FileInputStream fis = openFileInput("user.txt");
+        ObjectInputStream is = new ObjectInputStream(fis);
+        FragmentFour.setUsername((String) is.readObject());
+        is.close();
+        fis.close();
     }
 }

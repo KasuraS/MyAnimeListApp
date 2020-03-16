@@ -23,6 +23,13 @@ import com.bumptech.glide.Glide;
 import com.github.doomsdayrs.jikan4java.core.Connector;
 import com.github.doomsdayrs.jikan4java.types.main.user.User;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -50,7 +57,7 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
             return not_found;
         }
 
-        user = getUserByUsername(username);
+        setUser(getUserByUsername(username));
 
         if(user == null) {
             Toast.makeText(getContext(), R.string.userNotFound, Toast.LENGTH_SHORT).show();
@@ -119,9 +126,12 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
         return view;
     }
 
-    private User getUserByUsername(String username){
+    public User getUserByUsername(String username){
         try{
             User user = new Connector().userRetrieve(username).get();
+            if(user != null){
+                this.Serialize();
+            }
             return user;
         } catch (ExecutionException | InterruptedException e){
             e.printStackTrace();
@@ -167,5 +177,24 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
                         .commit();
                 break;
         }
+    }
+    public void Serialize() {
+        FileOutputStream fos = null;
+        try {
+            fos = getActivity().openFileOutput("user.txt", Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(FragmentFour.username);
+            os.flush();
+            fos.flush();
+            os.close();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
     }
 }
