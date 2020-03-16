@@ -52,8 +52,6 @@ public class ListFragment extends Fragment {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        } catch (IncompatibleEnumException e) {
-            e.printStackTrace();
         }
 
         return view;
@@ -81,14 +79,14 @@ public class ListFragment extends Fragment {
         return result;
     }
 
-    private void anime_initRecyclerView() throws ExecutionException, InterruptedException, IncompatibleEnumException {
+    private void anime_initRecyclerView() throws ExecutionException, InterruptedException {
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity(), retrieveAnimeList());
         RecyclerView recyclerView = view.findViewById(R.id.tab_anime_recycleView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void manga_initRecycleView() throws ExecutionException, InterruptedException, IncompatibleEnumException {
+    private void manga_initRecycleView() throws ExecutionException, InterruptedException {
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity(), retrieveMangaList());
         RecyclerView recyclerView = view.findViewById(R.id.tab_manga_recycleView);
         recyclerView.setAdapter(adapter);
