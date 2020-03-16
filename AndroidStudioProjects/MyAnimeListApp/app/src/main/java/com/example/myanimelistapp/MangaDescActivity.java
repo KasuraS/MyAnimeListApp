@@ -1,6 +1,5 @@
 package com.example.myanimelistapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,12 +34,7 @@ public class MangaDescActivity extends AppCompatActivity {
         Log.d(TAG, "onCreated started.");
 
         Toolbar toolbar = findViewById(R.id.toolBar2);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         getIncomingIntent();
     }

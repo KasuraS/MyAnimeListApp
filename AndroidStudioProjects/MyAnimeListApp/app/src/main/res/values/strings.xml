@@ -6,6 +6,14 @@
     <string name="anime">Anime</string>
     <string name="manga">Manga</string>
     <string name="profile">Profile</string>
+    <string name="login">Login</string>
     <string name="logout">Log out</string>
-    <string name="username">Default</string>
+    <string name="admin">Administrator</string>
+    <string name="catchphrase">I\'m a pure otaku.</string>
+    <string name="loggedin">Connected.</string>
+    <string name="loggedout">Disconnected.</string>
+    <string name="usernameIsNull">Hey you! Just put your username already, you idiot!</string>
+    <string name="userNotFound">Seems like you don\'t exist in this world, poor you!</string>
+    <string name="noGender">Gender : Genderless</string>
+    <string name="noLocation">Current location: Isekai</string>
 </resources>

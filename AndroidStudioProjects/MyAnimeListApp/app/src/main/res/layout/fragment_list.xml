@@ -1,24 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="fill"
     android:id="@+id/list_layout">
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/drawer_toolbar2"/>
 
     <TabHost android:id="@+id/tabhost"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="56dp">
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
+
             <TabWidget android:id="@android:id/tabs"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
+
             <FrameLayout android:id="@android:id/tabcontent"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
+
                 <LinearLayout
                     android:id="@+id/tab1"
                     android:layout_width="match_parent"
@@ -30,7 +40,9 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="56dp"
                         android:id="@+id/tab_anime_recycleView"/>
+
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/tab2"
                     android:layout_width="match_parent"
@@ -42,9 +54,13 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="56dp"
                         android:id="@+id/tab_manga_recycleView"/>
+
                 </LinearLayout>
+
             </FrameLayout>
+
         </LinearLayout>
+
     </TabHost>
 
 </RelativeLayout>

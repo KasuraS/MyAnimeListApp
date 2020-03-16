@@ -1,10 +1,7 @@
 package com.example.myanimelistapp;
 
-import android.app.ListActivity;
 import android.content.Context;
-import android.hardware.input.InputManager;
 import android.os.Bundle;
-import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,103 +10,111 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.github.doomsdayrs.jikan4java.core.Connector;
 import com.github.doomsdayrs.jikan4java.types.main.user.User;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class FragmentFour extends Fragment implements View.OnClickListener{
 
     protected static User user;
     protected static String username;
-    private View view;
     private Button mButton;
-    private Button AnimeListButton;
-    private Button MangaListButton;
+    private Button ListButton;
+    private boolean isClicked;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_four,container,false);
-        View not_found = inflater.inflate(R.layout.not_found, container, false);
+        View view = inflater.inflate(R.layout.fragment_four,container,false);
+        View not_found = inflater.inflate(R.layout.not_found,container, false);
 
-        //prevent username for being null
+        mButton = not_found.findViewById(R.id.button_username_query);
+        mButton.setOnClickListener(this);
+        System.out.println(isClicked);
         if(username == null){
-            mButton = not_found.findViewById(R.id.button_username_query);
-            mButton.setOnClickListener(this);
+            if(isClicked == true)
+                Toast.makeText(getContext(), R.string.usernameIsNull, Toast.LENGTH_SHORT).show();
+            isClicked = false;
             return not_found;
         }
 
         user = getUserByUsername(username);
 
         if(user == null) {
-            mButton = not_found.findViewById(R.id.button_username_query);
-            mButton.setOnClickListener(this);
+            Toast.makeText(getContext(), R.string.userNotFound, Toast.LENGTH_SHORT).show();
             return not_found;
+        } else {
+            Toast.makeText(getContext(), R.string.loggedin, Toast.LENGTH_SHORT).show();
         }
+
+        // Set header info
+        TextView username_in_header = getActivity().findViewById(R.id.username_in_header);
+        username_in_header.setText(user.username);
+        ImageView profile_photo_in_header = getActivity().findViewById(R.id.profile_photo_in_header);
+        Glide.with(getActivity())
+                .asBitmap()
+                .load(user.image_url)
+                .into(profile_photo_in_header);
+
+        // Set user info
         TextView username = view.findViewById(R.id.user_name);
         username.setText(user.username);
 
         TextView last_online = view.findViewById(R.id.user_last_online);
-        last_online.setText(user.last_online);
+        last_online.setText("Last Online: "+user.last_online);
 
         ImageView user_image = view.findViewById(R.id.user_img);
-
         Glide.with(getActivity())
                 .asBitmap()
                 .load(user.image_url)
                 .into(user_image);
 
         TextView user_gender = view.findViewById(R.id.user_gender);
-        user_gender.setText("Gender: " + user.gender);
+        if(user.gender == null){
+            user_gender.setText("Gender: Genderless");
+        } else {
+            user_gender.setText("Gender: " + user.gender);
+        }
 
         TextView user_location = view.findViewById(R.id.user_location);
         if(user.location == null){
             user_location.setText("Current location: Isekai");
-
         } else {
             user_location.setText("Current location: " + user.location);
         }
 
-        // Anime stats
-        ListView anime_stats = view.findViewById(R.id.user_anime_stats);
-        ArrayList<String> array_anime_stats = new ArrayList<>();
-        array_anime_stats.add("Watching: " + user.animeStats.get(0).watching);
-        array_anime_stats.add("Completed: " + user.animeStats.get(0).completed);
-        array_anime_stats.add("Dropped: " + user.animeStats.get(0).dropped);
-        array_anime_stats.add("On hold: " + user.animeStats.get(0).on_hold);
-        array_anime_stats.add("Plan to Watch: " + user.animeStats.get(0).plan_to_watch);
+        // Anime/Manga stats
+        ListView anime_manga_stats = view.findViewById(R.id.anime_manga_stats);
+        ArrayList<String> array_anime_manga_stats = new ArrayList<>();
+        array_anime_manga_stats.add("Finished: " + user.animeStats.get(0).watching + " anime(s) --- "
+                + user.mangaStats.get(0).reading + " manga(s)");
+        array_anime_manga_stats.add("Cleared: " + user.animeStats.get(0).completed + " anime(s) --- "
+                + user.mangaStats.get(0).completed + " manga(s)");
+        array_anime_manga_stats.add("Dropped: " + user.animeStats.get(0).dropped + " anime(s) --- "
+                + user.mangaStats.get(0).dropped + " manga(s)");
+        array_anime_manga_stats.add("On Hold: " + user.animeStats.get(0).on_hold + " anime(s) --- "
+                + user.mangaStats.get(0).on_hold + " manga(s)");
+        array_anime_manga_stats.add("Planned: " + user.animeStats.get(0).plan_to_watch + " anime(s) --- "
+                + user.mangaStats.get(0).plan_to_read + " manga(s)");
 
-        ArrayAdapter ad_anime = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, array_anime_stats);
-        anime_stats.setAdapter(ad_anime);
+        anime_manga_stats.setAdapter(new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, array_anime_manga_stats));
+        anime_manga_stats.setEnabled(false);
 
-        //Manga stats
-        ListView manga_stats = (ListView) view.findViewById(R.id.user_manga_stats);
-        ArrayList<String> array_manga_stats = new ArrayList<>();
-        array_manga_stats.add("Reading: " + user.mangaStats.get(0).reading);
-        array_manga_stats.add("Completed: " + user.mangaStats.get(0).completed);
-        array_manga_stats.add("Dropped: " + user.mangaStats.get(0).dropped);
-        array_manga_stats.add("On hold: " + user.mangaStats.get(0).on_hold);
-        array_manga_stats.add("PTR :" + user.mangaStats.get(0).plan_to_read);
-
-        ArrayAdapter ad_manga = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, array_manga_stats);
-        manga_stats.setAdapter(ad_manga);
-
-        Button buttonAnimeList = view.findViewById(R.id.button_to_animelist);
-        buttonAnimeList.setOnClickListener(this);
+        // Set listeners to List button
+        ListButton = view.findViewById(R.id.button_list);
+        ListButton.setOnClickListener(this);
 
         return view;
     }
@@ -124,39 +129,42 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
         return null;
     }
 
-    public User getUser() {
+    public static User getUser() {
         return user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public static void setUser(User u) {
+        user = u;
     }
 
-    public String getUsername() {
+    public static String getUsername() {
         return username;
     }
 
-    public void setUsername(String name) {
+    public static void setUsername(String name) {
         username = name;
     }
 
-
     @Override
     public void onClick(View v) {
-        FragmentTransaction ft;
         switch (v.getId()) {
             case R.id.button_username_query:
-                EditText name = getActivity().findViewById(R.id.username_query);
-                String name_string = name.getText().toString();
+                isClicked = true;
+                EditText editText = getActivity().findViewById(R.id.username_query);
+                String name_string = editText.getText().toString();
                 username = name_string;
-                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                ft =  getFragmentManager().beginTransaction();
-                ft.detach(this).attach(this).commit();
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.containerMain, new FragmentFour())
+                        .commit();
                 break;
-            case R.id.button_to_animelist:
-                ft =  getFragmentManager().beginTransaction();
-                ft.replace(R.id.containerMain, new ListFragment()).commit();
+            case R.id.button_list:
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.containerMain, new ListFragment())
+                        .commit();
                 break;
         }
     }
