@@ -1,4 +1,4 @@
-package com.example.myanimelistapp;
+package com.example.myanimelistapp.activity;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.example.myanimelistapp.R;
 import com.github.doomsdayrs.jikan4java.core.Connector;
 import com.github.doomsdayrs.jikan4java.types.main.manga.Manga;
 import com.github.doomsdayrs.jikan4java.types.main.manga.Serializations;
@@ -39,12 +40,13 @@ public class MangaDescActivity extends AppCompatActivity {
 
     private void getIncomingIntent(){
         Log.d(TAG, "getIncomingIntent: checking for incoming intents.");
-        if(getIntent().hasExtra("image_url") && getIntent().hasExtra("title") && getIntent().hasExtra("ID")){
+        if(getIntent().hasExtra("image_url") && getIntent().hasExtra("title")
+                && getIntent().hasExtra("mal_id")){
             Log.d(TAG, "getIncomingIntent: found intent extras.");
 
             String imgUrl = getIntent().getStringExtra("image_url");
             String title = getIntent().getStringExtra("title");
-            int id = getIntent().getIntExtra("ID", 0);
+            int id = getIntent().getIntExtra("mal_id", 0);
             setMangaDescription(imgUrl, title, id);
         }
     }
@@ -69,27 +71,32 @@ public class MangaDescActivity extends AppCompatActivity {
             authors = authors.concat(author.name);
         }
         elements.add("Authors: " + authors);
-        elements.add("Chapters: " + manga.chapters);
-        elements.add("Volumes: " + manga.volumes);
+        elements.add("Chapters: " + (manga.chapters == 0 ? "In Progress" : manga.chapters));
+        elements.add("Volumes: " + (manga.volumes == 0 ? "In Progress" : manga.volumes));
         elements.add("Status: " + manga.status);
-        elements.add("Date: " + manga.published.from);
-        elements.add("Score: " + manga.score);
-        elements.add("Rank " + manga.rank);
+        elements.add("Date: " + manga.published.from.substring(0,10));
+
+        String genres = "";
+        for(Genre genre: manga.genres) {
+            genres = genres.concat(genre.name + " - ");
+        }
+        if(!genres.isEmpty())
+            genres = genres.substring(0,genres.length()-2);
+        elements.add("Genres: " + (genres.isEmpty() ? "N/A" : genres));
+
+        String serializations = "";
+        for(Serializations serialization: manga.serializations) {
+            serializations = serializations.concat(serialization.name + " - ");
+        }
+        if(!serializations.isEmpty())
+            serializations = serializations.substring(0,serializations.length()-2);
+        elements.add("Publisher: " + (serializations.isEmpty() ? "N/A" : serializations));
+
+        elements.add("Score: " + (manga.score == 0 ? "N/A" : manga.score));
+        elements.add("Rank " + (manga.rank == 0 ? "N/A" : manga.rank));
         elements.add("Popularity: " + manga.popularity);
         elements.add("Members: " + manga.members);
         elements.add("Favorites: " + manga.favorites);
-        String genres = "";
-        for(Genre genre: manga.genres) {
-            genres = genres.concat(genre.name + " ");
-            System.out.println(genre.name);
-        }
-        String serializations = "";
-        for(Serializations serialization: manga.serializations) {
-            serializations = serializations.concat(serialization.name + " ");
-        }
-        elements.add("Publisher: " + serializations);
-        String studios = "";
-        elements.add("Genres: " + genres);
 
         ListView descriptions = findViewById(R.id.description_list_manga);
         ArrayAdapter ad_anime = new ArrayAdapter(this, android.R.layout.simple_list_item_1, elements);
@@ -97,13 +104,10 @@ public class MangaDescActivity extends AppCompatActivity {
     }
 
     private Manga getMangaByID(int id) {
-        try
-        {
+        try {
             Manga manga = new Connector().retrieveManga(id).get();
             return manga;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         return null;

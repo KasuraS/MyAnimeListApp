@@ -1,4 +1,4 @@
-package com.example.myanimelistapp;
+package com.example.myanimelistapp.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,8 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,9 +20,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.myanimelistapp.R;
 import com.github.doomsdayrs.jikan4java.core.Connector;
 import com.github.doomsdayrs.jikan4java.types.main.user.User;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -122,6 +127,8 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
     private User getUserByUsername(String username){
         try{
             User user = new Connector().userRetrieve(username).get();
+            if(user != null)
+                this.Serialize();
             return user;
         } catch (ExecutionException | InterruptedException e){
             e.printStackTrace();
@@ -161,11 +168,32 @@ public class FragmentFour extends Fragment implements View.OnClickListener{
                         .commit();
                 break;
             case R.id.button_list:
+                SearchView searchView = getActivity().findViewById(R.id.searchView);
+                searchView.setVisibility(View.VISIBLE);
                 getFragmentManager()
                         .beginTransaction()
                         .replace(R.id.containerMain, new ListFragment())
                         .commit();
                 break;
+        }
+    }
+
+    public void Serialize() {
+        FileOutputStream fos;
+        try {
+            fos = getActivity().openFileOutput("user.txt", Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(FragmentFour.username);
+            os.flush();
+            fos.flush();
+            os.close();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
     }
 }

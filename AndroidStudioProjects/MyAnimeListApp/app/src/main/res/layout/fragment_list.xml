@@ -6,11 +6,6 @@
     android:layout_gravity="fill"
     android:id="@+id/list_layout">
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        layout="@layout/drawer_toolbar2"/>
-
     <TabHost android:id="@+id/tabhost"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,7 +33,6 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="56dp"
                         android:id="@+id/tab_anime_recycleView"/>
 
                 </LinearLayout>
@@ -52,7 +46,6 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="56dp"
                         android:id="@+id/tab_manga_recycleView"/>
 
                 </LinearLayout>

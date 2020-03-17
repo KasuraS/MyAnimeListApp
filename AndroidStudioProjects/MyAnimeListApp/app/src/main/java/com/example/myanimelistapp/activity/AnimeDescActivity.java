@@ -1,4 +1,4 @@
-package com.example.myanimelistapp;
+package com.example.myanimelistapp.activity;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.myanimelistapp.R;
 import com.github.doomsdayrs.jikan4java.core.Connector;
 import com.github.doomsdayrs.jikan4java.types.main.anime.Anime;
 import com.github.doomsdayrs.jikan4java.types.main.anime.Studios;
@@ -38,12 +39,13 @@ public class AnimeDescActivity extends AppCompatActivity {
 
     private void getIncomingIntent(){
         Log.d(TAG, "getIncomingIntent: checking for incoming intents.");
-        if(getIntent().hasExtra("image_url") && getIntent().hasExtra("title") && getIntent().hasExtra("ID")){
+        if(getIntent().hasExtra("image_url") && getIntent().hasExtra("title")
+                && getIntent().hasExtra("mal_id")){
             Log.d(TAG, "getIncomingIntent: found intent extras.");
 
             String imgUrl = getIntent().getStringExtra("image_url");
             String title = getIntent().getStringExtra("title");
-            int id = getIntent().getIntExtra("ID", 0);
+            int id = getIntent().getIntExtra("mal_id", 0);
             setAnimeDescription(imgUrl, title, id);
         }
     }
@@ -64,25 +66,31 @@ public class AnimeDescActivity extends AppCompatActivity {
         elements.add("Original title: " + anime.title_japanese);
         elements.add("Type: " + anime.type);
         elements.add("Source: " + anime.source);
-        elements.add("Episodes: " + anime.episodes);
+        elements.add("Episodes: " + (anime.episodes == 0 ? "In Progress" : anime.episodes));
         elements.add("Status: " + anime.status);
-        elements.add("Date: " + anime.premiered);
-        elements.add("Score: " + anime.score);
-        elements.add("Rank " + anime.rank);
+        elements.add("Date: " + (anime.premiered == null ? "N/A" : anime.premiered));
+
+        String genres = "";
+        for(Genre genre: anime.genres) {
+            genres = genres.concat(genre.name + " - ");
+        }
+        if(!genres.isEmpty())
+            genres = genres.substring(0,genres.length()-2);
+        elements.add("Genres: " + (genres.isEmpty() ? "N/A" : genres));
+
+        String studios = "";
+        for(Studios studio: anime.studios) {
+            studios = studios.concat(studio.name + " - ");
+        }
+        if(!studios.isEmpty())
+            studios = studios.substring(0,studios.length()-2);
+        elements.add("Studios: " + (studios.isEmpty() ? "N/A" : studios));
+
+        elements.add("Score: " + (anime.score == 0 ? "N/A" : anime.score));
+        elements.add("Rank " + (anime.rank == 0 ? "N/A" : anime.rank));
         elements.add("Popularity: " + anime.popularity);
         elements.add("Members: " + anime.members);
         elements.add("Favorites: " + anime.favorites);
-        String genres = "";
-        for(Genre genre: anime.genres) {
-            genres = genres.concat(genre.name + " ");
-            System.out.println(genre.name);
-        }
-        String studios = "";
-        for(Studios studio: anime.studios) {
-            studios = studios.concat(studio.name + " ");
-        }
-        elements.add("Genres: " + genres);
-        elements.add("Studios: " + studios);
 
         ListView descriptions = findViewById(R.id.description_list_anime);
         ArrayAdapter ad_anime = new ArrayAdapter(this, android.R.layout.simple_list_item_1, elements);
@@ -90,13 +98,10 @@ public class AnimeDescActivity extends AppCompatActivity {
     }
 
     private Anime getAnimeByID(int id) {
-        try
-        {
+        try {
             Anime anime = new Connector().retrieveAnime(id).get();
             return anime;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         return null;
