@@ -6,7 +6,7 @@ An Android application using API Jikan (used by MyAnimeList plateform) that has 
 
 I used Android Studio 3.6.1 (I highly recommand you to update the latest version and SDK tools are up-to-date too). 
 You may need an Android phone that supports API Level 26 or higher for testing, but you can also use the emulator of Android Studio 
-if you have a good PC.
+if your PC has good specs (at least 4GB RAM, highly recommanded: 8GB RAM).
 
 ## 1 - How to launch the app
 
