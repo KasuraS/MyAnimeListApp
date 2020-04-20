@@ -15,7 +15,6 @@ if your PC has good specs (mininum: 4GB RAM, recommanded: 8GB RAM).
 - Select the target device (either run the emulator or use your own phone)
 - For virtual devices, you can choose a compatible version of Google Pixel or Samsung Galaxy
 - For physical devices, if the detection isn't working, go find your Android Build number and enable Developer options 
-(it all depends on your phone model, I suggest you enter "enable developer options" + your phone model in the browser)
 - Build and run the app
 - Wait for the launch (it's normal if it takes a couple of minutes for your first build)
 
